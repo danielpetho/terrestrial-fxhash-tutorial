@@ -821,7 +821,7 @@ void main() {
 
 Aaand here are some results:
 
-![generative surfaces](https://i.imgur.com/ELOZY2B.jpg)
+![generative surfaces](https://i.imgur.com/P9ZcXoZ.jpg)
 
 ## Post-processing
 
