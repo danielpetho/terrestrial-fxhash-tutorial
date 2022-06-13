@@ -1,5 +1,5 @@
 # Generative terrain NFTs for fxhash, in threejs
-In this tutorial, we will create a surface/terrain generator and make it into a [fxhash](https://www.fxhash.xyz/) compatible generative NFT. We will use fBm and Perlin noise to generate the terrain by modifying a simple plane's vertex positions, and we will accomplish this by writing a custom shader with lighting in threejs. Then we will explore how we can generate an infinite amount of variations, and then I'll show how you can generate different color palettes for the artwork.  
+In this tutorial, we will create a surface/terrain generator and make it into a [fxhash](https://www.fxhash.xyz/) compatible generative NFT. We will use fBm and Perlin noise to generate the terrain by modifying a simple plane's vertex positions, and we will accomplish this by writing a custom shader with lighting in threejs. Then we will explore how we can generate an infinite amount of variations, and then I'll show how you can generate different color palettes for the artwork.
 
 ## Prerequisites
 Some prerequisites for the tutorial: the basics of javascript obviously, and a bit of experience with npm, git, threejs, fxhash, NFTs, shaders, and glsl would not hurt (especially with the basics of shaders), but I'm trying to explain everything in detail. There are a lot of introductory articles and tutorials linked to the relevant parts, so I'm sure almost everyone can follow along.
@@ -14,7 +14,7 @@ Now buckle up because this is going to be a long one!
 Make sure you have node installed on your machine, because we will use webpack and npm as well in this tutorial. If you don't know what webpack, node, and npm are, read the first few paragraphs of [this](https://www.freecodecamp.org/news/what-is-npm-a-node-package-manager-tutorial-for-beginners/), and [this](https://www.freecodecamp.org/news/an-intro-to-webpack-what-it-is-and-how-to-use-it-8304ecdc3c60/) article.
 
 If this is already done, then first, open a terminal, clone the fx-hash webpack boilerplate and install the required packages. This boilerplate is a really good starting point to make a project for fxhash. Let's call our project terrestrial, because to me, it looks like surfaces of other (perhaps abandoned) terrestrial planets.
-```
+```sh
 $ git clone https://github.com/fxhash/fxhash-webpack-boilerplate.git terrestrial && cd terrestrial
 $ npm install
 ```
@@ -22,12 +22,12 @@ $ npm install
 If you aren't familiar with the boilerplate, I suggest you read through the `README.md` first. There is a helpful description of the details, e.g. how you can run, build and upload the project to fxhash, what the snippets do, etc. There are a few key things that we should keep in my mind when we are making a project for fxhash, but the most important is that we have to ensure that our code will always generate the same output when the same input (the hash data of the mint) is given to it. Therefore, as the README states, it is discouraged to use random functions (like `Math.random()`) in the code. Instead, the fxhash template provides a hash function for this (called `fxrand()`), which uses the input hash as a seed for generating random numbers. So whenever we want to inject randomness (and chaos!) into our code, we will use that function. More on this later, but try to keep in mind this information throughout this tutorial, because it's really important.
 
 Now install threejs as well.
-```
+```sh
 $ npm install --save three
 ```
 
 Okay, let's prepare our project first. 
-Head over to the `index.html` file inside the `public` folder, and rename the title of our project in the title tag.
+Head over to the `index.html` file inside the `./public` folder, and rename the title of our project in the title tag.
 
 ```html
 ...
@@ -98,7 +98,7 @@ const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
 renderer.setSize(4096, 4096, false);
 ```
 
-Add the scene, and for now, set the background color to a light gray. We will take care of the colors later on.
+Add the scene, and for now, set the background color to light gray. We will take care of the colors later on.
 ```javascript
 // Scene
 const scene = new THREE.Scene();
@@ -124,7 +124,7 @@ camera.position.z = 256;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 ```
 
-Add an Orbit Control as well, so we can move around in our scene. We only need this for debugging, and to see what's happening. We are not going to use it in our final code, but more on that later.
+Add an `OrbitControl` as well, so we can move around in our scene. We only need this for debugging, and to see what's happening. We are not going to use it in our final code, but more on that later.
 
 ```javascript
 import * as THREE from 'three';
@@ -184,7 +184,7 @@ render();
 
 Let's see what we got so far. You can run the code with the following command in the terminal:
 
-```
+```sh
 $ npm run start
 ```
 
@@ -196,7 +196,7 @@ Our plane is plain black, since our scene doesn't have any lights to interact wi
 There are multiple ways to use custom shaders in threejs. I like the approach when you write them in separate files, and load those files when you need them. For this, we need a loader, which can convert our glsl text files readable by our javascript code and threejs. My choice for this is the raw-loader module.
 
 Open the terminal again, and install the package with npm.
-```
+```sh
 $ npm install raw-loader
 ```
 We need to tell webpack that when it sees a file with an extension of `.vert` `.frag`, `.glsl` etc., it should use the raw-loader module to load it. For this, open the `webpack.config.js` file under the `./config` folder, and place the following snippet (noted with a comment) to the rules list under the `module` property.
@@ -517,12 +517,13 @@ I swear, finding the colors is the most difficult part sometimes, it's an art an
 
 However, we will use another approach in this tutorial - we will generate our own color palettes. This is a really great [video](https://www.youtube.com/watch?v=p6SkfMIREHA&list=PLroLjS4HDi0BLMx3d7mzROMfm7bC9ZQuc&index=4) (by the great people at [Futur](https://thefutur.com/)), on how to come up with color palettes that rock! Actually, if you want to dive deep, they have a [playlist](https://www.youtube.com/watch?v=QkCVrNoqcBU&list=PLroLjS4HDi0BLMx3d7mzROMfm7bC9ZQuc) about color theory. They are short, and they contain (almost) everything you need to know. But at least, watch the first mentioned video, because we will use exactly the same technique to generate our lovely colors.
 
-Basically, because we are using only two colors in this tutorial - one for the background, and one for our surface - it's going to be quite easy. We will use HSL (Hue, Saturation, Lightness) encoding. We have three categories altogether:
+Basically, because we are using only two colors in this tutorial - one for the background, and one for our surface - it's going to be quite easy. We will use HSL (Hue, Saturation, Lightness) encoding. We have four categories altogether:
 - Mono color palette - we use only one color (to be more precise, only one hue) both for the background and for the surface as well, but with different lightness and saturation. For example, our background could be dark blue, and our surface could be light blue.
 - Complementary - we pick a random hue value, and by moving on the color wheel 30-60 degrees we pick another one. eg: Violet background, blue-violet surface.
 - Analogous - we pick one hue, and the other one opposite to it. eg: Violet background, yellow surface.
+- Black and white - this tutorial is made for generativehut, which as you noticed follows a black and white approach. In honor of this, our fourth category is a black and white palette. Here the hues don't matter, because we are using fully unsaturated colors. Only the lightness matters.
 
-![color theory](https://i.imgur.com/7M0lRZ8.png)
+![color theory](https://i.imgur.com/9N2S7Lp.png)
 
 Okay, I hope the theory is clear, let's implement it in our code. Create a new file under `./src` called `color.js`.
 The hue value can range from 0 to 360, the saturation and the lightness from 0 to 100. There are two other noticeable things in this code.
@@ -540,7 +541,7 @@ const hsl2rgb = (h,s,l, a=s*Math.min(l,1-l), f= (n,k=(n+h/30)%12) => l - a*Math.
 const generateColorPalette = () => {
 
     // define our three different color palette category
-    const paletteList = ['Mono', 'Analogous', 'Complementary'];
+    const paletteList = ['Black&White', 'Mono', 'Analogous', 'Complementary'];
 
     // choose one randomly
     const colorPalette = FXRand.choice(paletteList); 
@@ -551,14 +552,14 @@ const generateColorPalette = () => {
     // INCREASING CONTRAST
     // if r true, then the background is going to be darker and less saturated, 
     // and the surface more brighter and colorful. If r is false, it supposed to be the other way around.
-    const saturation1 = r ? FXRand.num(0.4, 0.6) : FXRand.num(0.6, 0.95);
-    const lightness1 = r ? FXRand.num(0.1, 0.55) : FXRand.num(0.6, 0.95);
+    let saturation1 = r ? FXRand.num(0.4, 0.6) : FXRand.num(0.6, 0.95);
+    let lightness1 = r ? FXRand.num(0.1, 0.55) : FXRand.num(0.6, 0.95);
 
-    const saturation2 = r ? FXRand.num(0.7, 1.0) : FXRand.num(0.4, 0.7);
-    const lightness2 = r ? FXRand.num(0.55, 0.9) : FXRand.num(0.35, 0.55);
+    let saturation2 = r ? FXRand.num(0.7, 1.0) : FXRand.num(0.4, 0.7);
+    let lightness2 = r ? FXRand.num(0.55, 0.9) : FXRand.num(0.35, 0.55);
 
     // pick a random hue on the color wheel
-    const hue1 = FXRand.num(0, 360);
+    let hue1 = FXRand.num(0, 360);
     let hue2;
 
     if (colorPalette == 'Mono') {   
@@ -570,11 +571,20 @@ const generateColorPalette = () => {
         // if we have Analogous palette, we need to pick another hue next to the original one
         // either by decreasing or increasing the angle on the wheel
         hue2 += FXRand.bool(0.5) ? FXRand.num(-60, -30) : FXRand.num(30, 60);
-    } else {
+    } else (colorPalette == 'Complementary') {
         hue2 = hue1;
 
-        // if we have a Complimentary palette, we need the opposite value on the color wheel
+        // if we have a Complementary palette, we need the opposite value on the color wheel
         hue2 += 180;
+    } else {
+        // if we have a Black and White color palette, hue doesn't matter, and the saturation should be zero
+        hue1 = 0;
+        hue2 = 0;
+        saturation1 = 0;
+        saturation2 = 0;
+
+        lightness1 = r ? 0.05 : 0.9;
+        lightness2 = r ? 0.95 : 0.5;
     }
 
     const color1 = [hue1, saturation1, lightness1];
@@ -642,7 +652,7 @@ void main()
 Now refresh our code, and voilá! We have some colors, finally! 
 And if we did everything right, we get a different color palette after every refresh. It's not perfect, some color combos are not really aligned with my taste, but hey, it does the job. Here are a few results.  
   
-![color variations of the terrain](https://i.imgur.com/Hh1ZibN.png)
+![color variations of the terrain](https://i.imgur.com/6mbflxa.jpg)
 
 Okay, now move on to the noise parameters.
 
@@ -914,7 +924,7 @@ Let's generate the features right after the imports.
 
 // Feature generation
 let features = {
-  Palette: FXRand.choice(['Mono', 'Analogous', 'Complementary']),
+  Palette: FXRand.choice(['Black&White', 'Mono', 'Analogous', 'Complementary']),
   Layer: FXRand.bool(0.2) ? 1 : FXRand.int(2, 3)
 }
 
@@ -953,14 +963,14 @@ const layerCount = features.Layer;
 
 ## Uploading to fxhash
 The last thing is to upload the project to fxhash. Open a terminal, and run the following command.
-```bash
+```sh
 $ npm run build
 ```
 This will generate a compressed file called `project.zip` under the `./dist-zipped` folder. 
 We didn't do this throughout the tutorial, but it's important to frequently test your application in the sandbox environment. It helps to notice mistakes early on. 
 Uploading the project is pretty straightforward, we just have to go to the "mint a generative token" section, and upload the generated zip file. Then we can select the thumbnail for the project, then there are some customizable settings for the capture module (we have to select the "fxpreview trigger" option). Lastly, we have to add the name, description, price, royalties on secondary sales, edition number, etc. You can find everything you need to know on the [fxhash doc](https://www.fxhash.xyz/doc) (under "the artistic guides" section).
 
-That's it friends, I really hope it was useful! The project is released under this [link](). 256 edition, for 5 tezos. 100% of the proceedings (including secondary shares/royalties) go to [this](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/) donation contract, which was setup by the fxhash and the [Versum](https://versum.xyz/) team. This contract splits the received funds between different charities ([Save The Children](https://thegivingblock.com/donate/save-the-children/), [Direct Relief](https://thegivingblock.com/donate/direct-relief/), etc.). You can read more on the contract [here](https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising). If you want to support a good cause, mint one for yourself!:)
+That's it friends, I really hope it was useful! The project is released under this [link](). 256 edition, for 5 tezos. 90% of the proceedings (including secondary shares/royalties) go to [this](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/) donation contract, which was setup by the fxhash and the [Versum](https://versum.xyz/) team. This contract splits the received funds between different charities ([Save The Children](https://thegivingblock.com/donate/save-the-children/), [Direct Relief](https://thegivingblock.com/donate/direct-relief/), etc.). You can read more on the contract [here](https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising). If you want to support a good cause, mint one for yourself!:)
 
 Lastly, You can find the code on [GitHub](https://github.com/danielpetho/terrestrial-tutorial).
 If you have any questions, feedback, etc, just drop a message (and a follow!) on twitter [@nonzeroexitcode](https://twitter.com/nonzeroexitcode).

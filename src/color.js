@@ -14,14 +14,14 @@ const generateColorPalette = (features) => {
     // INCREASING CONTRAST
     // if r true, then the background is going to be darker and less saturated, 
     // and the surface more brighter and colorful. If r is false, it supposed to be the other way around.
-    const saturation1 = r ? FXRand.num(0.4, 0.6) : FXRand.num(0.6, 0.95);
-    const lightness1 = r ? FXRand.num(0.1, 0.55) : FXRand.num(0.6, 0.95);
+    let saturation1 = r ? FXRand.num(0.4, 0.6) : FXRand.num(0.6, 0.95);
+    let lightness1 = r ? FXRand.num(0.1, 0.55) : FXRand.num(0.6, 0.95);
 
-    const saturation2 = r ? FXRand.num(0.7, 1.0) : FXRand.num(0.4, 0.7);
-    const lightness2 = r ? FXRand.num(0.55, 0.9) : FXRand.num(0.35, 0.55);
+    let saturation2 = r ? FXRand.num(0.7, 1.0) : FXRand.num(0.4, 0.7);
+    let lightness2 = r ? FXRand.num(0.55, 0.9) : FXRand.num(0.35, 0.55);
 
     // pick a random hue on the color wheel
-    const hue1 = FXRand.num(0, 360);
+    let hue1 = FXRand.num(0, 360);
     let hue2;
 
     if (colorPalette == 'Mono') {   
@@ -33,11 +33,20 @@ const generateColorPalette = (features) => {
         // if we have Analogous palette, we need to pick another hue next to the original one
         // either by decreasing or increasing the angle on the wheel
         hue2 += FXRand.bool(0.5) ? FXRand.num(-60, -30) : FXRand.num(30, 60);
-    } else {
+    } else if (colorPalette == 'Complimentary') {
         hue2 = hue1;
 
         // if we have a Complimentary palette, we need the opposite value on the color wheel
         hue2 += 180;
+    } else {
+        // if we have a Black and White color palette, hue doesn't matter, and the saturation should be zero
+        hue1 = 0;
+        hue2 = 0;
+        saturation1 = 0;
+        saturation2 = 0;
+
+        lightness1 = r ? 0.05 : 0.9;
+        lightness2 = r ? 0.95 : 0.5;
     }
 
     const color1 = [hue1, saturation1, lightness1];
