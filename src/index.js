@@ -12,7 +12,7 @@ import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 
 // Feature generation
 let features = {
-  Palette: FXRand.choice(['BlackWhite', 'Mono', 'Analogous', 'Complementary']),
+  Palette: FXRand.choice(['BlackWhite']),//, 'Mono', 'Analogous', 'Complementary']),
   Layer: FXRand.bool(0.2) ? 1 : FXRand.int(2, 3)
 }
 
@@ -180,6 +180,16 @@ const effectFilm = new FilmPass(0.15, 0.025, 0, false);
 composer.addPass(effectFilm );
 
 composer.render();
+
+/* COMMENT THIS OUT IF YOU WANT TO SAVE THE IMG
+const imgData = renderer.domElement.toDataURL();
+
+const link = document.createElement("a");
+link.download = "demo.png";
+link.href = imgData;
+link.target = "_blank";
+link.click();
+*/
 
 // Trigger capture
 fxpreview();
