@@ -1,5 +1,7 @@
 # Generative terrain NFTs for fxhash, in threejs
-In this tutorial, we will create a surface/terrain generator and make it into a [fxhash](https://www.fxhash.xyz/) compatible generative NFT. We will use fBm and Perlin noise to generate the terrain by modifying a simple plane's vertex positions, and we will accomplish this by writing a custom shader with lighting in threejs. Then we will explore how we can generate an infinite amount of variations, and then I'll show how you can generate different color palettes for the artwork.
+In this tutorial, we will create a surface/terrain generator and make it into a [fxhash](https://www.fxhash.xyz/) compatible generative NFT. We will use fBm and Perlin noise to generate the terrain by modifying a simple plane's vertex positions, and we will accomplish this by writing a custom shader with lighting in threejs. Then we will explore how we can generate an infinite amount of variations, and then I'll show how you can generate different color palettes for the artwork. 
+
+In recent months fxhash and generative NFTs got really popular among the generative art community, so the aim of this tutorial is to encourage everyone to give a try to the platform. The whole project operates on the tezos blockchain, so as you may know, uploading / creating (or collecting) fees are basically costs nothing, the NFTs are [clean](https://medium.com/tqtezos/clean-nfts-on-tezos-58566b2fdba1), and fxhash is open for everyone. And as you will see, it isn't that difficult to create a nice little project. 
 
 ## Prerequisites
 Some prerequisites for the tutorial: the basics of javascript obviously, and a bit of experience with npm, git, threejs, fxhash, NFTs, shaders, and glsl would not hurt (especially with the basics of shaders), but I'm trying to explain everything in detail. There are a lot of introductory articles and tutorials linked to the relevant parts, so I'm sure almost everyone can follow along.
@@ -972,7 +974,7 @@ Uploading the project is pretty straightforward, we just have to go to the "mint
 
 That's it friends, I really hope it was useful! The project is released under this [link](). 256 edition, for 5 tezos. 90% of the proceedings (including secondary shares/royalties) go to [this](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/) donation contract, which was setup by the fxhash and the [Versum](https://versum.xyz/) team. This contract splits the received funds between different charities ([Save The Children](https://thegivingblock.com/donate/save-the-children/), [Direct Relief](https://thegivingblock.com/donate/direct-relief/), etc.). You can read more on the contract [here](https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising). If you want to support a good cause, mint one for yourself!:)
 
-Lastly, You can find the code on [GitHub](https://github.com/danielpetho/terrestrial-tutorial).
+You can find the code on [GitHub](https://github.com/danielpetho/terrestrial-tutorial).
 If you have any questions, feedback, etc, just drop a message (and a follow!) on twitter [@nonzeroexitcode](https://twitter.com/nonzeroexitcode).
 
 Have a nice day and see you in the next one! 🌞

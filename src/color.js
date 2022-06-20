@@ -33,10 +33,10 @@ const generateColorPalette = (features) => {
         // if we have Analogous palette, we need to pick another hue next to the original one
         // either by decreasing or increasing the angle on the wheel
         hue2 += FXRand.bool(0.5) ? FXRand.num(-60, -30) : FXRand.num(30, 60);
-    } else if (colorPalette == 'Complimentary') {
+    } else if (colorPalette == 'Complementary') {
         hue2 = hue1;
 
-        // if we have a Complimentary palette, we need the opposite value on the color wheel
+        // if we have a Complementary palette, we need the opposite value on the color wheel
         hue2 += 180;
     } else {
         // if we have a Black and White color palette, hue doesn't matter, and the saturation should be zero
