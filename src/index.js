@@ -12,7 +12,7 @@ import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 
 // Feature generation
 let features = {
-  Palette: FXRand.choice(['BlackWhite', 'Mono', 'Analogous', 'Complementary']),
+  Palette: FXRand.choice(['Black&White', 'Mono', 'Analogous', 'Complementary']),
   Layer: FXRand.bool(0.2) ? 1 : FXRand.int(2, 3)
 }
 
