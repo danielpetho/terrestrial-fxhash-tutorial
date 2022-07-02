@@ -3,6 +3,8 @@ In this tutorial, we will create a surface/terrain generator and make it into a 
 
 In recent months fxhash and generative NFTs got really popular among the generative art community, so the aim of this tutorial is to encourage everyone to give a try to the platform. Fxhash operates on the tezos blockchain, so as you may know, uploading / creating (or collecting) fees basically costs nothing, the NFTs are [clean](https://medium.com/tqtezos/clean-nfts-on-tezos-58566b2fdba1), and it's open for everyone. And as you will see, it isn't that difficult to create a nice little project. 
 
+The project is released under this [link.](https://www.fxhash.xyz/generative/15783)
+
 ## Prerequisites
 Some prerequisites for the tutorial: the basics of javascript obviously, and a bit of experience with npm, git, threejs, fxhash, NFTs, shaders, and glsl would not hurt (especially with the basics of shaders), but I'm trying to explain everything in detail. There are a lot of introductory articles and tutorials linked to the relevant parts, so I'm sure almost everyone can follow along.
 
@@ -974,7 +976,7 @@ Uploading the project is pretty straightforward, we just have to go to the "mint
 
 ![project on fxhash](https://i.imgur.com/4gyWicY.png)
 
-That's it friends, I really hope it was useful! The project is released under this [link](). 256 edition, for 5 tezos. 90% of the proceedings (including secondary shares/royalties) go to [this](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/) donation contract, which was setup by the fxhash and the [Versum](https://versum.xyz/) team. This contract splits the received funds between different charities ([Save The Children](https://thegivingblock.com/donate/save-the-children/), [Direct Relief](https://thegivingblock.com/donate/direct-relief/), etc.). You can read more on the contract [here](https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising). If you want to support a good cause, mint one for yourself!:)
+That's it friends, I really hope it was useful! The project is released under this [link](https://www.fxhash.xyz/generative/15783). 256 edition, for 5 tezos. 90% of the proceedings (including secondary shares/royalties) go to [this](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/) donation contract, which was setup by the fxhash and the [Versum](https://versum.xyz/) team. This contract splits the received funds between different charities ([Save The Children](https://thegivingblock.com/donate/save-the-children/), [Direct Relief](https://thegivingblock.com/donate/direct-relief/), etc.). You can read more on the contract [here](https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising). If you want to support a good cause, mint one for yourself!:)
 
 You can find the code on [GitHub](https://github.com/danielpetho/terrestrial-tutorial).
 If you have any questions, feedback, etc, just drop a message (and a follow!) on twitter [@nonzeroexitcode](https://twitter.com/nonzeroexitcode).
